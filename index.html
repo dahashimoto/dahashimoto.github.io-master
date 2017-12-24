@@ -2,7 +2,7 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="scripts/jquery.imagemapster.js"></script>
-  
+
   <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
@@ -50,7 +50,59 @@
   <area shape="rect" coords="748,692,780,719" alt="T tube" onmouseover="highlight(this);"  noimportance="key" step="Ttube" href="nohref" />
   </map>
 
-This is a test
+<script language="javascript">
+var map = $('#map'),
+    // a map tracking the state of each area
+  selStates = {},
+    // rendering options for the 1st selected state
+  selected1opts = {
+        fillColor: '00ff00',
+        stroke: true,
+        strokeColor: '000000',
+        strokeWidth: 2
+    },
+    // rendering options for the 2nd selected state
+    selected2opts = {
+        fillColor: 'ff0000',
+        stroke: true,
+        strokeColor: '00ff00',
+        strokeWidth: 1
+    };
+
+var renderOpts = [selected1opts, selected2opts];
+
+function onClick(data) {
+
+    // get current state (0,1,2) -- default to zero which means unset
+    var cur = selStates[data.key] || 0,
+        next = (cur + 1) % 3;
+
+    // always unset: if state 0, this is all we need to do. if state
+    // 2, we have to unset first, since setting the state for an area
+    // that's already selected will do nothing. If it happens to be going from
+    // 0 to 1, then no harm done.
+
+    map.mapster('set', false, data.key);
+
+    if (next) {
+        // now set the area state using the correct options
+        map.mapster('set', true , data.key,renderOpts[cur]);
+    }
+
+    // update local store with current state
+    // add 1, and apply a modulus of 3 to get new state
+
+    selStates[data.key] = next;
+}
+
+map.mapster({
+    mapKey: 'step',
+    // setting isSelectable=false will prevent imagemapster from using its own click-select
+    // handling. You could also return false from the onClick event to stop internal handling
+    isSelectable: false,
+    onClick: onClick
+});
+</script>
 
 </body>
 </html>
