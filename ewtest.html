@@ -1,68 +1,82 @@
 <html>
 <title>
-  E. Witkowski Lap Chole Procedural Map
+E. Witkowski Procedural <map>
 </title>
-  </map>
+</map>
 <head>
   <script src="https://dahashimoto.github.io/dahashimoto.github.io-master/scripts/jquery-1.7.1.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://dahashimoto.github.io/dahashimoto.github.io-master/css/main.css">
+  <link rel="stylesheet" type="text/css" href="https://dahashimoto.github.io/dahashimoto.github.io-master/css/normalize.css">
   <script src="https://dahashimoto.github.io/dahashimoto.github.io-master/scripts/jquery.imagemapster.js"></script>
 <style type="text/css"> </style>
 
 <script type='text/javascript'>//<![CDATA[
 // $(window).on('load', function(){ //Used to handle for jquery >1.8
 $(window).load(function(){
-var image = $('#map');
-var activeAreas = $('area.active');
-
-// build area data from areas
-
-var areas = $.map($('area[name]'),function(el) {
-    return {
-        key: $(el).attr('name'),
-        toolTip: $(el).attr('name')
+var image = $('#map'),
+// var map = $('#map'),
+    // a map tracking the state of each area
+    selStates = {},
+    // rendering options for the 1st selected state
+    selected1opts = {
+        fillColor: '00ff00',
+        stroke: true,
+        strokeColor: '000000',
+        strokeWidth: 2
+    },
+    // rendering options for the 2nd selected state
+    selected2opts = {
+        fillColor: 'ff0000',
+        stroke: true,
+        strokeColor: '00ff00',
+        strokeWidth: 1
     };
-});
 
-function copySelectionsToHiddenField() {
-    $('#selectedKeys').val(image.mapster('get'));
+var renderOpts = [selected1opts, selected2opts];
+
+function onClick(data) {
+
+    // get current state (0,1,2) -- default to zero which means unset
+    var cur = selStates[data.key] || 0,
+        next = (cur + 1) % 3;
+
+    // always unset: if state 0, this is all we need to do. if state
+    // 2, we have to unset first, since setting the state for an area
+    // that's already selected will do nothing. If it happens to be going from
+    // 0 to 1, then no harm done.
+
+    map.mapster('set', false, data.key);
+
+    if (next) {
+        // now set the area state using the correct options
+        map.mapster('set', true , data.key,renderOpts[cur]);
+    }
+
+    // update local store with current state
+    // add 1, and apply a modulus of 3 to get new state
+
+    selStates[data.key] = next;
 }
 
-image.mapster({
-    fillOpacity: 0.5,
-    fillColor: "0d5330",
-    stroke: true,
-    strokeColor: "000000",
-    strokeWidth: 4,
-    mapKey: 'name',
-    showToolTip: true,
-    areas: areas,
-    onStateChange: function(e) {
-        if (e.state==='select') {
-            copySelectionsToHiddenField();
-        }
-    }
+map.mapster({
+    mapKey: 'step',
+    // setting isSelectable=false will prevent imagemapster from using its own click-select
+    // handling. You could also return false from the onClick event to stop internal handling
+    isSelectable: false,
+    onClick: onClick
 });
-
-// $('#test1').bind('click',function() {
-//
-//    alert($('#selectedKeys').val());
-// });
-});//]]>
 
 </script>
 </head>
 
 <body>
 <center>
-<div>
-<font size="+3" weight="+1">E. Witkowski Lap Chole Procedural Map</font>
-</div>
-  <div style="border: 1px solid black; padding: 4px;">
 
-  This page is designed to gather data about your procedural map for laparoscopic cholecystectomy.<br>
-  Your input will assist in the development of a scoring rubric with which to score residents' conceptualization of the steps of a lap chole.
-<p>
+  <div id="test1" style="border: 1px solid black; padding: 4px;">
+  <form action='https://www.getform.org/f/1126121f-70b3-4cb7-b979-c84b6ee96695' method="POST">
+      Name: <input type="text" name="name">
+      <input type="hidden" id="selectedKeys" name="Key Steps">
+      <input type="submit" value="Submit">
+  </form>
 </div>
 
 <img id="map" src="images/EW_Small.jpg" border="0" usemap="#EW_step_map" width="1002" height="753px">
@@ -101,17 +115,6 @@ image.mapster({
   <area shape="rect" coords="748,692,780,719" name="T tube"   step="Ttube" href="#" />
   <area shape="rect" coords="229,295,294,330" name="Adjust retraction" step="adjust_retract" href="#" />
   </map>
-
-<p>
-
-  <div style="border: 1px solid black; padding: 4px;">
-  When you have completing selecting the appropriate steps, please fill in your name and click submit below:<p>
-  <form action='https://www.getform.org/f/1126121f-70b3-4cb7-b979-c84b6ee96695' method="POST">
-      Name: <input type="text" name="name"><br>
-      <input type="hidden" id="selectedKeys" name="Key Steps">
-      <input type="submit" value="Submit">
-  </form>
-  </div>
 </center>
 
 </body>
