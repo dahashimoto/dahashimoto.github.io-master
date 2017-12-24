@@ -1,120 +1,210 @@
 <html>
 <title>
-E. Witkowski Procedural <map>
+  E. Witkowski Lap Chole Procedural Map
 </title>
-</map>
+  </map>
 <head>
   <script src="https://dahashimoto.github.io/dahashimoto.github.io-master/scripts/jquery-1.7.1.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://dahashimoto.github.io/dahashimoto.github.io-master/css/normalize.css">
+  <link rel="stylesheet" selection="text/css" href="https://dahashimoto.github.io/dahashimoto.github.io-master/css/main.css">
   <script src="https://dahashimoto.github.io/dahashimoto.github.io-master/scripts/jquery.imagemapster.js"></script>
-<style type="text/css"> </style>
+<style selection="text/css"> </style>
 
-<script type='text/javascript'>//<![CDATA[
+<script selection='text/javascript'>//<![CDATA[
 // $(window).on('load', function(){ //Used to handle for jquery >1.8
 $(window).load(function(){
-var image = $('#map'),
-// var map = $('#map'),
-    // a map tracking the state of each area
-    selStates = {},
-    // rendering options for the 1st selected state
-    selected1opts = {
-        fillColor: '00ff00',
-        stroke: true,
-        strokeColor: '000000',
-        strokeWidth: 2
-    },
-    // rendering options for the 2nd selected state
-    selected2opts = {
-        fillColor: 'ff0000',
-        stroke: true,
-        strokeColor: '00ff00',
-        strokeWidth: 1
-    };
+  var map = $('#map'),
+      // a object map for tracking the state of each area
+      selStates = {},
 
-var renderOpts = [selected1opts, selected2opts];
+      // rendering options for Key Steps
+      selected1opts = {
+          fillColor: '0d5330',
+          stroke: true,
+          strokeColor: '000000',
+          strokeWidth: 2
+      },
 
-function onClick(data) {
+      // rendering options for Steps
+      selected2opts = {
+          fillColor: '565b5a',
+          stroke: true,
+          strokeColor: '00ff00',
+          strokeWidth: 1
+      };
+      // rending options for Key patient/surgeon states
+      selected3opts = {
+          fillColor: 'ce160c',
+          stroke: true,
+          strokeColor: 'ce160c',
+          strokeWidth: 1
+      };
+      // rending options for patient/surgeon states
+      selected4opts = {
+          fillColor: 'ea07d7',
+          stroke: true,
+          strokeColor: 'ea07d7',
+          strokeWidth: 1
+      };
+  // make an array from the different states' rendering options so we can easily
+  // choose one
 
-    // get current state (0,1,2) -- default to zero which means unset
-    var cur = selStates[data.key] || 0,
-        next = (cur + 1) % 3;
+  var renderOpts = [selected1opts, selected2opts, selected3opts, selected4opts];
 
-    // always unset: if state 0, this is all we need to do. if state
-    // 2, we have to unset first, since setting the state for an area
-    // that's already selected will do nothing. If it happens to be going from
-    // 0 to 1, then no harm done.
+  function copySelectionsToHiddenField() {
+      $('#selectedKeys').val(map.mapster('get'));
+      // $('#selectedtype').val(map.mapster('get', value));
+  }
 
-    map.mapster('set', false, data.key);
+  function onClick(data) {
 
-    if (next) {
-        // now set the area state using the correct options
-        map.mapster('set', true , data.key,renderOpts[cur]);
-    }
+      // get current state (0,1,2) -- default to zero which means unset
 
-    // update local store with current state
-    // add 1, and apply a modulus of 3 to get new state
+      var cur = selStates[data.key] || 0,
+          next = (cur + 1) % 5;
 
-    selStates[data.key] = next;
-}
+      // always unset: if state 0, this is all we need to do. if state
+      // 2, we have to unset first, since setting the state for an area
+      // that's already selected will do nothing. If it happens to be going from
+      // 0 to 1, then no harm done.
 
-map.mapster({
-    mapKey: 'step',
-    // setting isSelectable=false will prevent imagemapster from using its own click-select
-    // handling. You could also return false from the onClick event to stop internal handling
-    isSelectable: false,
-    onClick: onClick
-});
+      map.mapster('set', false, data.key);
+
+      if (next) {
+          // now set the area state using the correct options
+          map.mapster('set', true, data.key, renderOpts[cur]);
+      }
+
+      // update local store with current state
+      // add 1, and apply a modulus of 3 to get new state
+
+      selStates[data.key] = next;
+
+  }
+
+  // onStateChange: function(e) {
+  //     if (e.state==='select') {
+  //         copySelectionsToHiddenField();
+  //     }
+  // }
+
+  function buildselectionList(data) {
+      for (var i = 0; i < data.length; i++) {
+          var item = $('<input type="checkbox" name="' + data[i].key + '">'
+            + data[i].value);
+          stateslist.append(item);
+      }
+      /// return the actual elements that you want to be part of the list -- not a container.
+      // return stateslist.find("input:checkbox");
+      return stateslist.children();
+  };
+
+  map.mapster({
+      mapKey: 'name',
+      mapValue: selStates,
+      // setting isSelectable=false will prevent imagemapster from using its own click-select
+      // handling. You could also return false from the onClick event to stop internal handling
+      isSelectable: false,
+      // bind our "onClick" function above to handle area clicks
+      onClick: onClick,
+      onGetList: buildselectionList,
+      onStateChange: function(e) {
+        if (e.state==='select') {
+            copySelectionsToHiddenField();
+        }
+      }
+      // onClick: function(data) {
+      //   if (e.state==='select') {
+      //       copySelectionsToHiddenField();
+      //   }
+      // }
+
+  });
+
+
+  function populateform() {
+    document.mapform.mapdata.value = stateslist.children();
+  }
+// $('#selectedKeys').val(map.mapster('get',key));
+
+});//]]>
 
 </script>
 </head>
 
 <body>
 <center>
+<div style="font-size: 1.75em;">
+  E. Witkowski Lap Chole Procedural Map Key Step Selector
+</div>
+  <div style="border: 1px solid black; padding: 4px;">
 
-  <div id="test1" style="border: 1px solid black; padding: 4px;">
-  <form action='https://www.getform.org/f/1126121f-70b3-4cb7-b979-c84b6ee96695' method="POST">
-      Name: <input type="text" name="name">
-      <input type="hidden" id="selectedKeys" name="Key Steps">
-      <input type="submit" value="Submit">
-  </form>
+  This page is designed to gather data about your procedural map for laparoscopic cholecystectomy.<br>
+  Your input will assist in the development of a scoring rubric with which to score residents' conceptualization of the steps of a lap chole.
+<p>
+  <div style="width: 80%; text-align: left;">
+  <div style="font-size: 1em;">Instructions:</div>
+  <br>
+  1. Please review your procedual map. <br>
+  2. <br>
+  3. <br>
+  </div>
 </div>
 
 <img id="map" src="images/EW_Small.jpg" border="0" usemap="#EW_step_map" width="1002" height="753px">
 <map id="stepmap" name="EW_step_map">
-  <area shape="rect" coords="2,180,72,226" name="Divide GB peritoneum" step="Divide_GB_p" href="#" />
-  <area shape="rect" coords="86,229,202,287" name="Position structures"   step="Position_struc" href="#" />
-  <area shape="rect" coords="238,230,294,288" name="Visualize node"   step="Vis_node" href="#" />
-  <area shape="rect" coords="326,241,410,279" name="Expose Calot's Triangle"   step="Expose_calot" href="#" />
-  <area shape="rect" coords="538,236,608,272" name="Isolate duct"   step="Iso_duct" href="#" />
-  <area shape="rect" coords="539,326,616,360" name="Isolate artery"   step="Iso_art" href="#" />
-  <area shape="rect" coords="673,235,739,272" name="Divide duct"   step="Div_duct" href="#" />
-  <area shape="rect" coords="674,330,750,366" name="Divide artery"   step="Div_art" href="#" />
-  <area shape="rect" coords="842,226,870,246" name="Clip cystic duct"   step="Clip_duct" href="#" />
-  <area shape="rect" coords="801,259,860,279" name="Endoloop cystic duct"   step="Endoloop" href="#" />
-  <area shape="rect" coords="804,295,848,318" name="Staple cystic duct"   step="Staple_duct" href="#" />
-  <area shape="rect" coords="921,235,990,290" name="Remove GB from liver bed"   step="Remove_GB" href="#" />
-  <area shape="rect" coords="9,342,108,376" name="Divide adhesions"   step="Div_adhesion" href="#" />
-  <area shape="rect" coords="247,181,303,206" name="Bleeding"   step="Bleeding" href="#" />
-  <area shape="rect" coords="330,162,399,184" name="Obtain Hemostasis"   step="Hemostasis" href="#" />
-  <area shape="rect" coords="443,171,468,185" name="Perform IOC"   step="IOC" href="#" />
-  <area shape="rect" coords="554,117,615,148" name="Bile duct exploration"   step="BD_exp" href="#" />
-  <area shape="rect" coords="660,34,703,61" name="Lap or Open Bile Duct Exploration"   step="Lap_Open_BD_Exp" href="#" />
-  <area shape="rect" coords="662,95,709,122" name="Postop ERCP"   step="ERCP" href="#" />
-  <area shape="rect" coords="938,347,966,372" name="Spill Bile"   step="Spill_bile" href="#" />
-  <area shape="rect" coords="959,416,1001,445" name="Suction bile"   step="Suck_bile" href="#" />
-  <area shape="rect" coords="354,459,416,494" name="Injury to structure"   no step="Inj_struct" href="#" />
-  <area shape="rect" coords="504,519,545,550" name="GB injury"   step="GB_Inj" href="#" />
-  <area shape="rect" coords="491,566,562,595" name="Cystic artery injury"   step="Cyst_art_inj" href="#" />
-  <area shape="rect" coords="744,485,821,533" name="Fold GB for compression"   step="Fold_GB" href="#" />
-  <area shape="rect" coords="753,545,828,580" name="Sponge for compression"   step="Sponge" href="#" />
-  <area shape="rect" coords="655,573,710,597" name="Bleeding after cystic artery injury"   step="Bleed__cystic_art_inj" href="#" />
-  <area shape="rect" coords="499,606,536,635" name="CBD injury"   step="CBD_inj" href="#" />
-  <area shape="rect" coords="599,608,648,637" name="Call HPB surgeon"   step="Call_HPB" href="#" />
-  <area shape="rect" coords="630,672,665,698" name="ID injury"   step="ID_Inj" href="#" />
-  <area shape="rect" coords="744,646,789,677" name="Primary repair"   step="Primary_repair" href="#" />
-  <area shape="rect" coords="748,692,780,719" name="T tube"   step="Ttube" href="#" />
-  <area shape="rect" coords="229,295,294,330" name="Adjust retraction" step="adjust_retract" href="#" />
+  <area shape="rect" coords="2,180,72,226" name="Divide GB peritoneum" selection="step" href="#" />
+  <area shape="rect" coords="86,229,202,287" name="Position structures"   selection="step" href="#" />
+  <area shape="rect" coords="238,230,294,288" name="Visualize node"   selection="step" href="#" />
+  <area shape="rect" coords="326,241,410,279" name="Expose Calot's Triangle"   selection="step" href="#" />
+  <area shape="rect" coords="538,236,608,272" name="Isolate duct"   selection="step" href="#" />
+  <area shape="rect" coords="539,326,616,360" name="Isolate artery"   selection="step" href="#" />
+  <area shape="rect" coords="673,235,739,272" name="Divide duct"   selection="step" href="#" />
+  <area shape="rect" coords="674,330,750,366" name="Divide artery"   selection="step" href="#" />
+  <area shape="rect" coords="842,226,870,246" name="Clip cystic duct"   selection="step" href="#" />
+  <area shape="rect" coords="801,259,860,279" name="Endoloop cystic duct"   selection="step" href="#" />
+  <area shape="rect" coords="804,295,848,318" name="Staple cystic duct"   selection="step" href="#" />
+  <area shape="rect" coords="921,235,990,290" name="Remove GB from liver bed"   selection="step" href="#" />
+  <area shape="rect" coords="9,342,108,376" name="Divide adhesions"   selection="step" href="#" />
+  <area shape="rect" coords="247,181,303,206" name="Bleeding"   selection="step" href="#" />
+  <area shape="rect" coords="330,162,399,184" name="Obtain Hemostasis"   selection="step" href="#" />
+  <area shape="rect" coords="443,171,468,185" name="Perform IOC"   selection="step" href="#" />
+  <area shape="rect" coords="554,117,615,148" name="Bile duct exploration"   selection="step" href="#" />
+  <area shape="rect" coords="660,34,703,61" name="Lap or Open Bile Duct Exploration"   selection="step" href="#" />
+  <area shape="rect" coords="662,95,709,122" name="Postop ERCP"   selection="step" href="#" />
+  <area shape="rect" coords="938,347,966,372" name="Spill Bile"   selection="step" href="#" />
+  <area shape="rect" coords="959,416,1001,445" name="Suction bile"   selection="step" href="#" />
+  <area shape="rect" coords="354,459,416,494" name="Injury to structure"   no selection="step" href="#" />
+  <area shape="rect" coords="504,519,545,550" name="GB injury"   selection="step" href="#" />
+  <area shape="rect" coords="491,566,562,595" name="Cystic artery injury"   selection="step" href="#" />
+  <area shape="rect" coords="744,485,821,533" name="Fold GB for compression"   selection="step" href="#" />
+  <area shape="rect" coords="753,545,828,580" name="Sponge for compression"   selection="step" href="#" />
+  <area shape="rect" coords="655,573,710,597" name="Bleeding after cystic artery injury"   selection="step" href="#" />
+  <area shape="rect" coords="499,606,536,635" name="CBD injury"   selection="step" href="#" />
+  <area shape="rect" coords="599,608,648,637" name="Call HPB surgeon"   selection="step" href="#" />
+  <area shape="rect" coords="630,672,665,698" name="ID injury"   selection="step" href="#" />
+  <area shape="rect" coords="744,646,789,677" name="Primary repair"   selection="step" href="#" />
+  <area shape="rect" coords="748,692,780,719" name="Place T tube"   selection="step" href="#" />
+  <area shape="rect" coords="229,295,294,330" name="Adjust retraction" selection="step" href="#" />
   </map>
+
+<p>
+
+  <div style="border: 1px solid black; padding: 4px;">
+  When you have completing selecting the appropriate steps, please fill in your name and click submit below:<p>
+  <form action='https://www.getform.org/f/1126121f-70b3-4cb7-b979-c84b6ee96695' method="POST" name="mapform" onsubmit="populateform()">
+      Name: <input selection="text" name="name"><br>
+      <input type="hidden" id="selectedKeys" name="Steps">
+      <input type="hidden" id="selection" name="Selection type">
+      <input type="hidden" id="mapdata" name="Other map data">
+      <!-- <input selection="hidden" id="type"> -->
+      <input type="submit" value="Submit">
+      <noscript>
+      <div>
+      If you can see this then SCRIPTS are turned OFF on your machine and it won't work
+      </div>
+     </noscript>
+  </form>
+  </div>
 </center>
 
 </body>
