@@ -7,65 +7,84 @@
 
 <script type='text/javascript'>//<![CDATA[
 $(window).on('load', function(){
-var map = $('#map'),
-    // a map tracking the state of each area
-    selStates = {},
-    // rendering options for the 1st selected state
-    selected1opts = {
-        fillColor: '00ff00',
-        stroke: true,
-        strokeColor: '000000',
-        strokeWidth: 2
-    },
-    // rendering options for the 2nd selected state
-    selected2opts = {
-        fillColor: 'ff0000',
-        stroke: true,
-        strokeColor: '00ff00',
-        strokeWidth: 1
-    };
+  $('img').mapster({
+      mapKey: 'step',
+      fill: true,
+      fillColor: '00FF00',
+      border: true,
+      stroke: true,
+      areas: [
+          {key: 'Position_struc', selected: true },
+          {key: 'Bleeding', selected: true }
+          ]
+  });
 
-var renderOpts = [selected1opts, selected2opts];
+  // $('area[state=CO]').mapster('set',false)
+  //     .mapster('set',true,{ fillColor: 'ff0000' });
 
-function onClick(data) {
+  });
 
-    // get current state (0,1,2) -- default to zero which means unset
-    var cur = selStates[data.key] || 0,
-        next = (cur + 1) % 3;
-
-    // always unset: if state 0, this is all we need to do. if state
-    // 2, we have to unset first, since setting the state for an area
-    // that's already selected will do nothing. If it happens to be going from
-    // 0 to 1, then no harm done.
-
-    map.mapster('set', false, data.key);
-
-    if (next) {
-        // now set the area state using the correct options
-        map.mapster('set', true , data.key,renderOpts[cur]);
-    }
-
-    // update local store with current state
-    // add 1, and apply a modulus of 3 to get new state
-
-    selStates[data.key] = next;
-}
-
-map.mapster({
-    mapKey: 'state',
-    // setting isSelectable=false will prevent imagemapster from using its own click-select
-    // handling. You could also return false from the onClick event to stop internal handling
-    isSelectable: false,
-    onClick: onClick
-});
-});//]]>
+//Below is the first attempt
+// $(window).on('load', function(){
+// var map = $('#map'),
+//     // a map tracking the state of each area
+//     selStates = {},
+//     // rendering options for the 1st selected state
+//     selected1opts = {
+//         fillColor: '00ff00',
+//         stroke: true,
+//         strokeColor: '000000',
+//         strokeWidth: 2
+//     },
+//     // rendering options for the 2nd selected state
+//     selected2opts = {
+//         fillColor: 'ff0000',
+//         stroke: true,
+//         strokeColor: '00ff00',
+//         strokeWidth: 1
+//     };
+//
+// var renderOpts = [selected1opts, selected2opts];
+//
+// function onClick(data) {
+//
+//     // get current state (0,1,2) -- default to zero which means unset
+//     var cur = selStates[data.key] || 0,
+//         next = (cur + 1) % 3;
+//
+//     // always unset: if state 0, this is all we need to do. if state
+//     // 2, we have to unset first, since setting the state for an area
+//     // that's already selected will do nothing. If it happens to be going from
+//     // 0 to 1, then no harm done.
+//
+//     map.mapster('set', false, data.key);
+//
+//     if (next) {
+//         // now set the area state using the correct options
+//         map.mapster('set', true , data.key,renderOpts[cur]);
+//     }
+//
+//     // update local store with current state
+//     // add 1, and apply a modulus of 3 to get new state
+//
+//     selStates[data.key] = next;
+// }
+//
+// map.mapster({
+//     mapKey: 'state',
+//     // setting isSelectable=false will prevent imagemapster from using its own click-select
+//     // handling. You could also return false from the onClick event to stop internal handling
+//     isSelectable: false,
+//     onClick: onClick
+// });
+// });//]]>
 
 </script>
 </head>
 
 <body>
 <center>
-  <img id="map" src="images/EW_Small.jpg" border="0" usemap="#map" width="1002" height="753px">
+  <img id="map" src="images/EW_Small.jpg" border="0" usemap="#EW_step_map" width="1002" height="753px">
 
 <map id="stepMap" name="EW_step_map">
   <!-- #$-:Image map file created by GIMP Image Map plug-in -->
@@ -73,38 +92,38 @@ map.mapster({
   <!-- #$-:Please do not edit lines starting with "#$" -->
   <!-- #$VERSION:2.3 -->
   <!-- #$AUTHOR:Daniel Hashimoto -->
-  <area shape="rect" coords="2,180,72,226" alt="Divide GB peritoneum" onmouseover="highlight(this);" onmouseout="this.blur();" importance="key" step="Divide_GB_p" href="#" />
-  <area shape="rect" coords="86,229,202,287" alt="Position structures" onmouseover="highlight(this);" importance="key" step="Position_struc" href="#" />
-  <area shape="rect" coords="238,230,294,288" alt="Visualize node" onmouseover="highlight(this);" importance="key" step="Vis_node" href="#" />
-  <area shape="rect" coords="326,241,410,279" alt="Expose calot" onmouseover="highlight(this);" importance="key" step="Expose_calot" href="#" />
-  <area shape="rect" coords="538,236,608,272" alt="Isolate duct" onmouseover="highlight(this);" importance="key" step="Iso_duct" href="#" />
-  <area shape="rect" coords="539,326,616,360" alt="Isolate artery" onmouseover="highlight(this);" importance="key" step="Iso_art" href="#" />
-  <area shape="rect" coords="673,235,739,272" alt="Divide duct" onmouseover="highlight(this);" importance="key" step="Div_duct" href="#" />
-  <area shape="rect" coords="674,330,750,366" alt="Divide artery" onmouseover="highlight(this);" importance="key" step="Div_art" href="#" />
-  <area shape="rect" coords="842,226,870,246" alt="Clip duct" onmouseover="highlight(this);" importance="key" step="Clip_duct" href="#" />
-  <area shape="rect" coords="801,259,860,279" alt="Endoloop duct" onmouseover="highlight(this);" importance="key" step="Endoloop" href="#" />
-  <area shape="rect" coords="804,295,848,318" alt="Staple duct" onmouseover="highlight(this);" importance="key" step="Staple_duct" href="#" />
-  <area shape="rect" coords="921,235,990,290" alt="Remove GB from liver bed" onmouseover="highlight(this);" importance="key" step="Remove_GB" href="#" />
-  <area shape="rect" coords="9,342,108,376" alt="Divide adhesions" onmouseover="highlight(this);" importance="key" step="Div_adhesion" href="#" />
-  <area shape="rect" coords="247,181,303,206" alt="Bleeding" onmouseover="highlight(this);" importance="key" step="Bleeding" href="#" />
-  <area shape="rect" coords="330,162,399,184" alt="Hemostasis" onmouseover="highlight(this);" importance="key" step="Hemostasis" href="#" />
-  <area shape="rect" coords="443,171,468,185" alt="Perform IOC" onmouseover="highlight(this);" importance="key" step="IOC" href="#" />
-  <area shape="rect" coords="554,117,615,148" alt="Bile duct exploration" onmouseover="highlight(this);" importance="key" step="BD_exp" href="#" />
-  <area shape="rect" coords="660,34,703,61" alt="Lap or Open Bile Duct Exploration" onmouseover="highlight(this);" importance="key" step="Lap_Open_BD_Exp" href="#" />
-  <area shape="rect" coords="662,95,709,122" alt="Postop ERCP" onmouseover="highlight(this);" importance="key" step="ERCP" href="#" />
-  <area shape="rect" coords="938,347,966,372" alt="Spill Bile" onmouseover="highlight(this);" importance="key" step="Spill_bile" href="#" />
-  <area shape="rect" coords="959,416,1001,445" alt="Suction bile" onmouseover="highlight(this);" importance="key" step="Suck_bile" href="#" />
-  <area shape="rect" coords="354,459,416,494" alt="Injury to structure" onmouseover="highlight(this);"  noimportance="key" step="Inj_struct" href="nohref" />
-  <area shape="rect" coords="504,519,545,550" alt="GB injury" onmouseover="highlight(this);" importance="key" step="GB_Inj" href="#" />
-  <area shape="rect" coords="491,566,562,595" alt="Cystic artery injury" onmouseover="highlight(this);" importance="key" step="Cyst_art_inj" href="#" />
-  <area shape="rect" coords="744,485,821,533" alt="Fold GB for compression" onmouseover="highlight(this);" importance="key" step="Fold_GB" href="#" />
-  <area shape="rect" coords="753,545,828,580" alt="Sponge for compression" onmouseover="highlight(this);" importance="key" step="Sponge" href="#" />
-  <area shape="rect" coords="655,573,710,597" alt="Bleeding after cystic artery injury" onmouseover="highlight(this);" importance="key" step="Bleed__cystic_art_inj" href="#" />
-  <area shape="rect" coords="499,606,536,635" alt="CBD injury" onmouseover="highlight(this);" importance="key" step="CBD_inj" href="#" />
-  <area shape="rect" coords="599,608,648,637" alt="Call HPB surgeon" onmouseover="highlight(this);" importance="key" step="Call_HPB" href="#" />
-  <area shape="rect" coords="630,672,665,698" alt="ID injury" onmouseover="highlight(this);" importance="key" step="ID_Inj" href="#" />
-  <area shape="rect" coords="744,646,789,677" alt="Primary repair" onmouseover="highlight(this);" importance="key" step="Primary_repair" href="#" />
-  <area shape="rect" coords="748,692,780,719" alt="T tube" onmouseover="highlight(this);"  noimportance="key" step="Ttube" href="nohref" />
+  <area shape="rect" coords="2,180,72,226" alt="Divide GB peritoneum" step="Divide_GB_p" href="#" />
+  <area shape="rect" coords="86,229,202,287" alt="Position structures"   step="Position_struc" href="#" />
+  <area shape="rect" coords="238,230,294,288" alt="Visualize node"   step="Vis_node" href="#" />
+  <area shape="rect" coords="326,241,410,279" alt="Expose calot"   step="Expose_calot" href="#" />
+  <area shape="rect" coords="538,236,608,272" alt="Isolate duct"   step="Iso_duct" href="#" />
+  <area shape="rect" coords="539,326,616,360" alt="Isolate artery"   step="Iso_art" href="#" />
+  <area shape="rect" coords="673,235,739,272" alt="Divide duct"   step="Div_duct" href="#" />
+  <area shape="rect" coords="674,330,750,366" alt="Divide artery"   step="Div_art" href="#" />
+  <area shape="rect" coords="842,226,870,246" alt="Clip duct"   step="Clip_duct" href="#" />
+  <area shape="rect" coords="801,259,860,279" alt="Endoloop duct"   step="Endoloop" href="#" />
+  <area shape="rect" coords="804,295,848,318" alt="Staple duct"   step="Staple_duct" href="#" />
+  <area shape="rect" coords="921,235,990,290" alt="Remove GB from liver bed"   step="Remove_GB" href="#" />
+  <area shape="rect" coords="9,342,108,376" alt="Divide adhesions"   step="Div_adhesion" href="#" />
+  <area shape="rect" coords="247,181,303,206" alt="Bleeding"   step="Bleeding" href="#" />
+  <area shape="rect" coords="330,162,399,184" alt="Hemostasis"   step="Hemostasis" href="#" />
+  <area shape="rect" coords="443,171,468,185" alt="Perform IOC"   step="IOC" href="#" />
+  <area shape="rect" coords="554,117,615,148" alt="Bile duct exploration"   step="BD_exp" href="#" />
+  <area shape="rect" coords="660,34,703,61" alt="Lap or Open Bile Duct Exploration"   step="Lap_Open_BD_Exp" href="#" />
+  <area shape="rect" coords="662,95,709,122" alt="Postop ERCP"   step="ERCP" href="#" />
+  <area shape="rect" coords="938,347,966,372" alt="Spill Bile"   step="Spill_bile" href="#" />
+  <area shape="rect" coords="959,416,1001,445" alt="Suction bile"   step="Suck_bile" href="#" />
+  <area shape="rect" coords="354,459,416,494" alt="Injury to structure"   no step="Inj_struct" href="nohref" />
+  <area shape="rect" coords="504,519,545,550" alt="GB injury"   step="GB_Inj" href="#" />
+  <area shape="rect" coords="491,566,562,595" alt="Cystic artery injury"   step="Cyst_art_inj" href="#" />
+  <area shape="rect" coords="744,485,821,533" alt="Fold GB for compression"   step="Fold_GB" href="#" />
+  <area shape="rect" coords="753,545,828,580" alt="Sponge for compression"   step="Sponge" href="#" />
+  <area shape="rect" coords="655,573,710,597" alt="Bleeding after cystic artery injury"   step="Bleed__cystic_art_inj" href="#" />
+  <area shape="rect" coords="499,606,536,635" alt="CBD injury"   step="CBD_inj" href="#" />
+  <area shape="rect" coords="599,608,648,637" alt="Call HPB surgeon"   step="Call_HPB" href="#" />
+  <area shape="rect" coords="630,672,665,698" alt="ID injury"   step="ID_Inj" href="#" />
+  <area shape="rect" coords="744,646,789,677" alt="Primary repair"   step="Primary_repair" href="#" />
+  <area shape="rect" coords="748,692,780,719" alt="T tube"   no step="Ttube" href="nohref" />
   </map>
 </center>
 
