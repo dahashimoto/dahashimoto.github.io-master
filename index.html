@@ -1,8 +1,9 @@
 <html>
 <head>
   <script src="https://dahashimoto.github.io/dahashimoto.github.io-master/scripts/jquery-3.2.1.min.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="https://dahashimoto.github.io/dahashimoto.github.io-master/css/normalize.css">
   <script src="https://dahashimoto.github.io/dahashimoto.github.io-master/scripts/jquery.imagemapster.js"></script>
+<style type="text/css"> </style>
 
 <script type='text/javascript'>//<![CDATA[
 $(window).on('load', function(){
@@ -63,10 +64,10 @@ map.mapster({
 </head>
 
 <body>
+<center>
+  <img id="map" src="images/EW_Small.jpg" border="0" usemap="#map" style="width:1002px; height:753px;">
 
-  <img src="images/EW_Small.jpg" width="1002" height="753" border="0" usemap="#map" />
-
-  <map id="stepMap" name="EW_step_map">
+<map id="stepMap" name="EW_step_map">
   <!-- #$-:Image map file created by GIMP Image Map plug-in -->
   <!-- #$-:GIMP Image Map plug-in by Maurits Rijk -->
   <!-- #$-:Please do not edit lines starting with "#$" -->
@@ -105,7 +106,7 @@ map.mapster({
   <area shape="rect" coords="744,646,789,677" alt="Primary repair" onmouseover="highlight(this);" importance="key" step="Primary_repair" href="#" />
   <area shape="rect" coords="748,692,780,719" alt="T tube" onmouseover="highlight(this);"  noimportance="key" step="Ttube" href="nohref" />
   </map>
-
+</center>
 
 
 </body>
