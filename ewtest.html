@@ -95,7 +95,7 @@ $(window).load(function(){
       }
       /// return the actual elements that you want to be part of the list -- not a container.
       // return stateslist.find("input:checkbox");
-      return stateslist.children();
+      $('#selecteditems').val(stateslist.children());
   };
 
   map.mapster({
@@ -122,8 +122,8 @@ $(window).load(function(){
 
 
   function populateform() {
-    document.mapform.mapdata.value = stateslist.children();
-  }
+    document.mapform.mapdata.value = $('#selecteditems');
+  };
 // $('#selectedKeys').val(map.mapster('get',key));
 
 });//]]>
@@ -145,8 +145,10 @@ $(window).load(function(){
   <div style="font-size: 1em;">Instructions:</div>
   <br>
   1. Please review your procedual map. <br>
-  2. <br>
-  3. <br>
+  2. For each operative step that you believe to be key (necessary) to completing and/or managing events during a laparoscopic cholecystectomy, please click the step until it is highlighted in <font style= "color:0d5330">green</font>.<br>
+  3. For each operative step that you believe to be important (but not necessary) to completing and/or managing events during a laparoscopic cholecystectomy, please click the step until it is highlighted in <font style="color: 565b5a">grey</font>.<br>
+  4. For each patient or surgeon factor that you believe to be key (necessary) to completing and/or managing events during a laparoscopic cholecystectomy, please click the step until it is highlighted in <font style="color: ce160c">red</font>.<br>
+  5. For each patient or surgeon factor that you believe to be important (but not necessary) to completing and/or managing events during a laparoscopic cholecystectomy, please click the step until it is highlighted in <font style="color: ea07d7">pink</font>.<br>
   </div>
 </div>
 
@@ -194,7 +196,7 @@ $(window).load(function(){
   <form action='https://www.getform.org/f/1126121f-70b3-4cb7-b979-c84b6ee96695' method="POST" name="mapform" onsubmit="populateform()">
       Name: <input selection="text" name="name"><br>
       <input type="hidden" id="selectedKeys" name="Steps">
-      <input type="hidden" id="selection" name="Selection type">
+      <input type="hidden" id="selecteditems" name="Selection type">
       <input type="hidden" id="mapdata" name="Other map data">
       <!-- <input selection="hidden" id="type"> -->
       <input type="submit" value="Submit">
